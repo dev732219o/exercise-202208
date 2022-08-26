@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scalee=1">
+	<link rel="stylesheet" href="/css/bootstrap.min.css" >
+	<title>商品一覧</title>
+</head>
+<body>
+<nav class="navbar navbar-invers">
+	<div class="container">
+		<div class="navabar-header">
+			<a class="navbar-brand" href="/item">商品管理デモ</a>
+		</div>
+	</div>
+</nav>
+<div class="container">
+	<div class="card card-primary mb-3">
+		<div class="card-header">
+			<h5 class="card-title">商品リスト<a href="/items/new" class = "btn btn-success float-right">新規</a></h5>
+		</div>
+		<div class="card-body" th:if="!${items.size()}">
+		<!-- TymeleafのIf文 Trueの場合に処理を行う。 -->	
+			<p>商品がありません。</p>
+		</div>
+		<table class="table table-striped" th:if="${items.size()}">
+			<thread>
+				<tr>
+					<th style="width: 10%">ID</th>
+					<th style="width: 30%">商品名</th>
+					<th style="width: 10%">価格</th>
+					<th style="width: 20%">ベンダー</th>
+					<th style="width: 30%"></th>
+				</tr>
+			</thread>
+		<today>
+			<tr th:each="item:${items}" th:object="${item}">
+			<!-- th:each属性を付けたタグは、「th:each属性に指定したコレクション」の個数分出力される。 -->
+			<td th:text="*{id}"></td>
+			<td th:text="*{name}"></td>
+			<td th:text="*{price}"></td>
+			<td th:text="*{vendor}"></td>
+			<td class="float-right">
+				<form th:action="@{/items/{id}(id=*{id})}" th:method="delete">
+					<a class="btn btn-primary" th:href="@{/items/{id}(id=*{id})}">詳細</a>
+					<a class="btn btn-primary" th:href="@{/items/{id}/edit/(id=*{id})}">変更</a>
+				<button class="btn btn-primary">削除</button>
+			</form>
+			</td>
+			</tr>
+		</today>
+		</table>
+	</div>
+</div>
+  <script src="/js/jquery-3.4.1.min"></script>
+  <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
