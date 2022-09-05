@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,17 +25,20 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
+    private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
+
 	//itemsにGETでリクエストした場合
 	@GetMapping
 	public String index(Model model) {
+        logger.debug("message debug index");
 		//Model型のmodelにitemsをつめることでControllerからView(Tymleaf)へデータを受け渡せる。
-		System.out.println("item index / controller");
 		model.addAttribute("items", itemService.findAll());
 		return "index"; //戻り値としてindex.htmlを表示する
 	}
 	
 	@GetMapping("{id}")
 	public String show(@PathVariable Long id, Model model) {//PathVariableでURLに含まれる動的なパラメータを受け取る
+        logger.debug("message debug id");
 		model.addAttribute("item", itemService.findOne(id));
 		return "show";
 	}
@@ -46,7 +51,7 @@ public class ItemController {
 	
 	@GetMapping("{id}/edit")
 	public String edit(@PathVariable Long id, @ModelAttribute("item") Item item, Model model) {
-		System.out.println("item edit / controller");
+        logger.debug("message debug {id}/edit");
 		model.addAttribute("item", itemService.findOne(id));
 		return "edit";
 	}
@@ -57,21 +62,21 @@ public class ItemController {
 		if(result.hasErrors()) {
 			return "new";
 		} else {
-			System.out.println("item saving / controller");
+	        logger.debug("message debug create");
 			itemService.save(item);
 			return "redirect:/items";
 		}
 	}
 	@PutMapping("{id}")
 	public String update(@PathVariable Long id, @ModelAttribute("item") @Validated Item item, BindingResult result, Model model) {
-		System.out.println("item updating 0 / controller");
 		if(result.hasErrors()) {
 			model.addAttribute("item", item);
+	        logger.error("message debug update error");
 			return "edit";
 		} else {
-			System.out.println("item updating 1 / controller");
 			item.setId(id);
 			itemService.update(item);
+	        logger.debug("message debug update");
 			return "redirect:/items";
 		}
 	}

@@ -27,13 +27,11 @@ public class ItemService {
 	
 	@Transactional
 	public void save(Item item) {
-		System.out.println("item saving / service");
 		itemMapper.save(item);
 	}
 	
 	@Transactional
 	public void update(Item item) {
-		System.out.println("item updating / service");
 		itemMapper.update(item);
 	}
 	
